@@ -65,9 +65,15 @@ class Dashboard extends React.Component {
         this.setState(prevState => {
             let favorites = [...prevState.favorites]
             let oldindex = favorites.indexOf(movie)
-            let swappingwith = favorites[oldindex + 1] || favorites[oldindex]
-            favorites[oldindex] = swappingwith
-            favorites[oldindex + 1] = movie
+            let swappingwith; 
+            if (oldindex !== favorites.length - 1) {
+                swappingwith = favorites[oldindex + 1]
+                favorites[oldindex] = swappingwith
+                favorites[oldindex + 1] = movie
+            } else {
+                swappingwith = favorites[oldindex]
+            }
+
             return { favorites };
         })
     }
