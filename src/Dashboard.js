@@ -8,6 +8,7 @@ class Dashboard extends React.Component {
             movies: [],
         };
         this.addToFavorites = this.addToFavorites.bind(this);
+        this.removeFromFavorites = this.removeFromFavorites.bind(this);
     }
 
     componentDidMount() {
@@ -20,8 +21,16 @@ class Dashboard extends React.Component {
         } else {
             this.setState({ favorites: [...this.state.favorites, movie] })
         }
-        
+    }
 
+    removeFromFavorites(movie){
+        this.setState({ favorites: [...this.state.favorites.filter(favorite => favorite !== movie)]})
+        // if (this.state.favorites.includes(movie)) {
+            
+    
+        // } else {
+        //     this.setState({ favorites: [...this.state.favorites, movie] })
+        // }
     }
 
     getData() {
@@ -49,9 +58,13 @@ class Dashboard extends React.Component {
                 {favorites.length === 0 ? ( 
                     <div className="movie"> Click title below to add to favorites </div>
                 ) : (
-                favorites.map(fav => {
+                favorites.map((fav, i) => {
                     return(
-                        <div className="movie" key={fav}>{fav}</div>
+                        <div className="movie" key={fav}>
+                            <span>{i+1})</span>
+                            <span>{fav}</span>
+                            <span onClick={(e) => this.removeFromFavorites(fav)}> R </span>
+                        </div>
                     )
                 })
                 )
