@@ -13,10 +13,12 @@ class Dashboard extends React.Component {
         this.getData();
     }
 
+    favorite(movie){
+        console.log('favorite!', movie)
+    }
+
     getData() {
         fetch("https://raw.githubusercontent.com/aaroncaraway/data/master/2019moviesALL.json")
-            // .then(res => res.text())
-            // .then(text => console.log(text))
           .then(response => {
             return response.json();
           })
@@ -36,7 +38,7 @@ class Dashboard extends React.Component {
                 <h2> 2019 Movies </h2>
                 {movies.map(movie => {
                     return (
-                        <div key={movie.title}>{movie.title}</div>
+                        <div key={movie.title} onClick={(e) => this.favorite(movie.title)}>{movie.title}</div>
                     )
                 })}
             </div>
