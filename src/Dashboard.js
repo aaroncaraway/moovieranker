@@ -42,18 +42,25 @@ class Dashboard extends React.Component {
         const movies = this.state.movies;
         const favorites = this.state.favorites;
         return (
-            <div>
+            <div className="main">
                 <h2> 2019 Movies </h2>
                 <h3> My Favorites </h3>
-                {favorites.map(fav => {
+                
+                {favorites.length === 0 ? ( 
+                    <div className="movie"> Click title below to add to favorites </div>
+                ) : (
+                favorites.map(fav => {
                     return(
-                        <div>{fav}</div>
+                        <div className="movie" key={fav}>{fav}</div>
                     )
-                })}
+                })
+                )
+                }
+
                 <h3> All Movies</h3>
                 {movies.map(movie => {
                     return (
-                        <div key={movie.title} onClick={(e) => this.addToFavorites(movie.title)}>{movie.title}</div>
+                        <div className="movie" key={movie.title} onClick={(e) => this.addToFavorites(movie.title)}>{movie.title}</div>
                     )
                 })}
             </div>

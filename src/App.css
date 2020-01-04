@@ -1,3 +1,10 @@
+.movie {
+  margin: 10px;
+}
+.main {
+  margin: 10px;
+}
+
 .App {
   max-width: 400px;
   margin: 0 auto;
