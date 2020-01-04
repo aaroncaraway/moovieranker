@@ -7,14 +7,21 @@ class Dashboard extends React.Component {
             favorites: [],
             movies: [],
         };
+        this.addToFavorites = this.addToFavorites.bind(this);
     }
 
     componentDidMount() {
         this.getData();
     }
 
-    favorite(movie){
-        console.log('favorite!', movie)
+    addToFavorites(movie){
+        if (this.state.favorites.includes(movie)) {
+            alert('already added!')
+        } else {
+            this.setState({ favorites: [...this.state.favorites, movie] })
+        }
+        
+
     }
 
     getData() {
@@ -33,12 +40,20 @@ class Dashboard extends React.Component {
 
     render() {
         const movies = this.state.movies;
+        const favorites = this.state.favorites;
         return (
             <div>
                 <h2> 2019 Movies </h2>
+                <h3> My Favorites </h3>
+                {favorites.map(fav => {
+                    return(
+                        <div>{fav}</div>
+                    )
+                })}
+                <h3> All Movies</h3>
                 {movies.map(movie => {
                     return (
-                        <div key={movie.title} onClick={(e) => this.favorite(movie.title)}>{movie.title}</div>
+                        <div key={movie.title} onClick={(e) => this.addToFavorites(movie.title)}>{movie.title}</div>
                     )
                 })}
             </div>
