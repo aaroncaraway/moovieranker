@@ -7,30 +7,41 @@ class Dashboard extends React.Component {
             favorites: [],
             movies: [],
         };
+        this.saveFavorites = this.saveFavorites.bind(this);
         this.addToFavorites = this.addToFavorites.bind(this);
         this.removeFromFavorites = this.removeFromFavorites.bind(this);
     }
 
     componentDidMount() {
+        window.addEventListener('beforeunload', this.saveFavorites)
+        let favs = JSON.parse(localStorage.getItem('myFavorites')) || []
+        this.setState({ favorites: favs })
         this.getData();
     }
 
-    addToFavorites(movie){
+    componentWillUnmount() {
+        this.saveFavorites()
+        window.removeEventListener('beforeunload', this.saveFavorites)
+    }
+
+    saveFavorites() {
+        console.log('saving favorites!')
+        localStorage.setItem('myFavorites', JSON.stringify(this.state.favorites))
+    }
+
+    addToFavorites(movie, e){
         if (this.state.favorites.includes(movie)) {
-            alert('already added!')
+            this.removeFromFavorites(movie)
+            e.target.style.color = 'black'
         } else {
+            e.preventDefault();
+            e.target.style.color = 'green'
             this.setState({ favorites: [...this.state.favorites, movie] })
         }
     }
 
     removeFromFavorites(movie){
         this.setState({ favorites: [...this.state.favorites.filter(favorite => favorite !== movie)]})
-        // if (this.state.favorites.includes(movie)) {
-            
-    
-        // } else {
-        //     this.setState({ favorites: [...this.state.favorites, movie] })
-        // }
     }
 
     getData() {
@@ -73,7 +84,9 @@ class Dashboard extends React.Component {
                 <h3> All Movies</h3>
                 {movies.map(movie => {
                     return (
-                        <div className="movie" key={movie.title} onClick={(e) => this.addToFavorites(movie.title)}>{movie.title}</div>
+                        <div className="movie" key={movie.title} onClick={(e) => this.addToFavorites(movie.title, e)}>
+                            <span>{movie.title}</span>
+                        </div>
                     )
                 })}
             </div>
