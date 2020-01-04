@@ -10,6 +10,9 @@ class Dashboard extends React.Component {
         this.saveFavorites = this.saveFavorites.bind(this);
         this.addToFavorites = this.addToFavorites.bind(this);
         this.removeFromFavorites = this.removeFromFavorites.bind(this);
+        this.upvote = this.upvote.bind(this);
+        this.downvote = this.downvote.bind(this);
+        this.clearFavorites = this.clearFavorites.bind(this);
     }
 
     componentDidMount() {
@@ -25,7 +28,6 @@ class Dashboard extends React.Component {
     }
 
     saveFavorites() {
-        console.log('saving favorites!')
         localStorage.setItem('myFavorites', JSON.stringify(this.state.favorites))
     }
 
@@ -44,6 +46,32 @@ class Dashboard extends React.Component {
         this.setState({ favorites: [...this.state.favorites.filter(favorite => favorite !== movie)]})
     }
 
+    clearFavorites() {
+        this.setState({ favorites: [] })
+    }
+
+    upvote(movie){
+        this.setState(prevState => {
+            let favorites = [...prevState.favorites]
+            let oldindex = favorites.indexOf(movie)
+            let swappingwith = favorites[oldindex - 1] || favorites[oldindex]
+            favorites[oldindex] = swappingwith
+            favorites[oldindex - 1] = movie
+            return { favorites };
+        })
+    }
+
+    downvote(movie){
+        this.setState(prevState => {
+            let favorites = [...prevState.favorites]
+            let oldindex = favorites.indexOf(movie)
+            let swappingwith = favorites[oldindex + 1] || favorites[oldindex]
+            favorites[oldindex] = swappingwith
+            favorites[oldindex + 1] = movie
+            return { favorites };
+        })
+    }
+
     getData() {
         fetch("https://raw.githubusercontent.com/aaroncaraway/data/master/2019moviesALL.json")
           .then(response => {
@@ -51,7 +79,6 @@ class Dashboard extends React.Component {
           })
           .then(data => {
             this.setState({ movies: data });
-            console.log('getting here', data)
           })
           .catch(err => {
             console.log("Error Reading data " + err);
@@ -64,7 +91,7 @@ class Dashboard extends React.Component {
         return (
             <div className="main">
                 <h2> 2019 Movies </h2>
-                <h3> My Favorites </h3>
+                <h3> My Favorites <span onClick={(e) => this.clearFavorites()}> R </span></h3>
                 
                 {favorites.length === 0 ? ( 
                     <div className="movie"> Click title below to add to favorites </div>
@@ -75,6 +102,8 @@ class Dashboard extends React.Component {
                             <span>{i+1})</span>
                             <span>{fav}</span>
                             <span onClick={(e) => this.removeFromFavorites(fav)}> R </span>
+                            <span onClick={(e) => this.upvote(fav)}> UP </span>
+                            <span onClick={(e) => this.downvote(fav)}> DOWN </span>
                         </div>
                     )
                 })
